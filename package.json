@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dggsax/progressMeter.git"
+    "url": "git+https://github.com/dggsax/scoreMeter.git"
   },
   "author": "Daniel \"Gonzo\" Gonzalez",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dggsax/progressMeter/issues"
+    "url": "https://github.com/dggsax/scoreMeter/issues"
   },
-  "homepage": "https://github.com/dggsax/progressMeter#readme",
+  "homepage": "https://github.com/dggsax/scoreMeter#readme",
   "peerDependencies": {
     "react": "^16.x"
   },
