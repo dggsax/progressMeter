@@ -1,4 +1,4 @@
-# progressMeter
+# scoreMeter
 making a react progress meter component for my internship
 
 ## How to Use
