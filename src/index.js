@@ -8,19 +8,19 @@ export default class ScoreMeter extends React.Component {
 			width: this.props.width || 250,
 			height: this.props.height || 35,
 			bounds: this.props.bounds,
-			score: this.props.score,
+			coverage: this.props.coverage,
 			color: this.props.color || "#F8F8F8"
 		}
 	}
 
 	getPlacementIndex() {
-		var score = this.state.score;
+		var coverage = this.state.coverage;
 		var placementIndex = 0;
 		var boundsLength = this.state.bounds.length;
 
 		for (var i = 0; i < boundsLength; i++) {
 			var currentBound = this.state.bounds[i];
-			if (score >= currentBound) {
+			if (coverage >= currentBound) {
 				placementIndex++
 			} else { break }
 		}
@@ -68,7 +68,7 @@ export default class ScoreMeter extends React.Component {
 	buildMeter() {
 		var width = this.state.width;
 		var height = this.state.height;
-		var scoreWidth = width * this.state.score;
+		var scoreWidth = width * this.state.coverage;
 		var scoreColor = this.determineColor();
 		var tickWidth = 1;
 

@@ -8,7 +8,7 @@ Import Score Meter with:
 And then refer to it like:
     `<ScoreMeter
         bounds={[.6,.8,.9]}
-        score={.85}
+        coverage={.85}
         width={250}
         height={50}
      />`
