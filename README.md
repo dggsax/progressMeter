@@ -11,4 +11,7 @@ And then refer to it like:
         coverage={.85}
         width={250}
         height={50}
+        className={"hello"}
+        starSize={20}
      />`
+The className, starSize, width, and height props are all optional. By default, the width is 250, the height is 35, the className for the generated div is "Stars", and the default size of the stars is 10 pixels
