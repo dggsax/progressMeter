@@ -9,7 +9,8 @@ export default class ScoreMeter extends React.Component {
 			height: this.props.height || 35,
 			bounds: this.props.bounds,
 			coverage: this.props.coverage,
-			color: this.props.color || "#F8F8F8"
+			color: this.props.color || "#F8F8F8",
+			starSize: this.props.starSize || 10,
 		}
 	}
 
@@ -53,7 +54,6 @@ export default class ScoreMeter extends React.Component {
 	}
 
 	getStarFills() {
-		console.log("yeet");
 		var filledStars = this.getPlacementIndex();
 		var emptyStars = this.state.bounds.length - filledStars;
 
@@ -65,79 +65,75 @@ export default class ScoreMeter extends React.Component {
 		return fills;
 	}
 
+	getStarStyle(fill) {
+		let starStyle = {
+			fill: fill,
+		    stroke: '#FFD700',
+		  	stopColor: '#FFD700',
+		    strokeWidth: 1,
+		}
+
+		return starStyle;
+	}
+
 	buildMeter() {
 		var width = this.state.width;
 		var height = this.state.height;
 		var scoreWidth = width * this.state.coverage;
 		var scoreColor = this.determineColor();
 		var tickWidth = 1;
-
 		var starFills = this.getStarFills();
-		
-		let starStyle1 = {
-			fill: starFills[0],
-		    stroke: '#FFD700',
-		  	stopColor: '#FFD700',
-		    strokeWidth: 1,
-		}
 
-		let starStyle2 = {
-			fill: starFills[1],
-		    stroke: '#FFD700',
-		  	stopColor: '#FFD700',
-		    strokeWidth: 1,
-		}
-
-		let starStyle3 = {
-			fill: starFills[2],
-		    stroke: '#FFD700',
-		  	stopColor: '#FFD700',
-		    strokeWidth: 1,
-		}
+		var starSize = this.state.starSize; // the size of the stars
+		var starDisplacement = starSize / 2 + 0.5; // how much the stars have to shift to the left to align centers with the ticks
+		var meterDisplacement = starSize + 2; // how much the meter needs to shift down to make room for the stars
+		var meterTranslate = `translate(0 ${meterDisplacement})`; // the translate function for making room for the stars
+		var outlineTranslate = `translate(-0.5 ${meterDisplacement - .5})`; // the outline has to move a slightly different way
 
 		var meter = (
-			<svg width={width} height={height+12} >
-				{/* Base Rectangle */}
-				<rect width={width} height={height} transform="translate(0 12)" fill={this.state.color} />
-
-				{/* Score Rectangle */}
-				<rect width={scoreWidth} transform="translate(0 12)" height={height} fill={scoreColor} />
-				
-				{/* Tick Mark 1 */}
-				<svg viewBox="0 0 32 32" width="10px" height="10px" x={this.state.bounds[0] * width - 6.5}>
-					<g id="icon-star" style={starStyle1} >
-			          <path d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,12.118 l11.547-1.2L16.026,0.6L20.388,10.918z"/>
-			        </g>
-		        </svg>
-		        <rect width={tickWidth} height={height} transform="translate(0 12)" fill="#95989A" x={this.state.bounds[0] * width - 1}/>
-				
-				{/* Tick Mark 2 */}
-				<svg viewBox="0 0 32 32" width="10px" height="10px" x={this.state.bounds[1] * width - 6.5}>
-					<g id="icon-star" style={starStyle2} >
-			          <path d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,12.118 l11.547-1.2L16.026,0.6L20.388,10.918z"/>
-			        </g>
-		        </svg>
-		        <rect width={tickWidth} height={height} transform="translate(0 12)" fill="#95989A" x={this.state.bounds[1] * width - 1}/>
-
-		    	{/* Tick Mark 3 */}
-				<svg viewBox="0 0 32 32" width="10px" height="10px" x={this.state.bounds[2] * width - 6.5}>
-					<g id="icon-star" style={starStyle3} >
-			          <path d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,12.118 l11.547-1.2L16.026,0.6L20.388,10.918z"/>
-			        </g>
-		        </svg>
-		        <rect width={tickWidth} height={height} transform="translate(0 12)" fill="#95989A" x={this.state.bounds[2] * width - 1}/>
+			<div className={this.props.className}>
+				<svg width={width} height={height+meterDisplacement} >
+					{/* Base Rectangle */}
+					<rect width={width} height={height} transform={meterTranslate} fill={this.state.color} />
 
 
-				
-				{/* The outline! */}
-				<rect width={tickWidth -.5} height={height} transform="translate(0 12)" fill="#95989A" x={0}/>
-				<rect width={width} height={height} 
-					transform="translate(-0.5 11.5)" 
-					stroke={"#95989A"} 
-					fill="none"
-				/> 
-				
-			</svg>
+					{/* Score Rectangle */}
+					<rect width={scoreWidth} transform={meterTranslate} height={height} fill={scoreColor} />
+					
+
+					{/* Stars */}
+					<svg viewBox="0 0 32 32" width={starSize} height={starSize} x={this.state.bounds[0] * width - starDisplacement}>
+						<g id="icon-star" style={this.getStarStyle(starFills[0])} >
+				          <path d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,12.118 l11.547-1.2L16.026,0.6L20.388,10.918z"/>
+				        </g>
+			        </svg>
+					<svg viewBox="0 0 32 32" width={starSize} height={starSize} x={this.state.bounds[1] * width - starDisplacement}>
+						<g id="icon-star" style={this.getStarStyle(starFills[1])} >
+				          <path d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,12.118 l11.547-1.2L16.026,0.6L20.388,10.918z"/>
+				        </g>
+			        </svg>
+					<svg viewBox="0 0 32 32" width={starSize} height={starSize} x={this.state.bounds[2] * width - starDisplacement}>
+						<g id="icon-star" style={this.getStarStyle(starFills[2])} >
+				          <path d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,12.118 l11.547-1.2L16.026,0.6L20.388,10.918z"/>
+				        </g>
+			        </svg>
+			        
+			        {/* Tick marks */}
+					<rect width={tickWidth} height={height} transform={meterTranslate} fill="#95989A" x={this.state.bounds[0] * width - 1}/>
+			        <rect width={tickWidth} height={height} transform={meterTranslate} fill="#95989A" x={this.state.bounds[1] * width - 1}/>
+					<rect width={tickWidth} height={height} transform={meterTranslate} fill="#95989A" x={this.state.bounds[2] * width - 1}/>
+
+					
+					{/* The outline that goes above everything */}
+					<rect width={tickWidth} height={height} transform={meterTranslate} fill="#95989A" x={0}/>
+					<rect width={width} height={height} 
+						transform={outlineTranslate} 
+						stroke={"#95989A"} 
+						fill="none"
+					/> 
+					
+				</svg>
+			</div>
 		)
 
 		return meter;
